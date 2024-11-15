@@ -10,7 +10,7 @@ class Note extends FlxSprite
 	public var time:Float = 0;
 
 	public var parentStrum:Strumline;
-	public var noteData:Int = 0;
+	public var id:Int = 0;
 	public var prevNote:Note;
 
 	public var sustainLength:Float = 0;
@@ -20,7 +20,7 @@ class Note extends FlxSprite
 
 	public static var arrowArray:Array<String> = ["purple", "blue", "green", "red"];
 
-	public function new(time:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false)
+	public function new(time:Float, id:Int, ?prevNote:Note, ?sustainNote:Bool = false)
 	{
 		super();
 
@@ -32,21 +32,21 @@ class Note extends FlxSprite
 
 		this.time = time;
 
-		this.noteData = noteData;
+		this.id = id;
 
 		frames = Paths.sparrow('NOTE_assets');
 
-		animation.addByPrefix('scroll', arrowArray[noteData] + ' instance');
+		animation.addByPrefix('scroll', arrowArray[id] + ' instance');
 
-		animation.addByPrefix('hold', arrowArray[noteData] + ' hold piece');
-		animation.addByPrefix('holdEnd', arrowArray[noteData] + ' hold end');
+		animation.addByPrefix('hold', arrowArray[id] + ' hold piece');
+		animation.addByPrefix('holdEnd', arrowArray[id] + ' hold end');
 
 		animation.play('scroll');
 
 		setGraphicSize(Std.int(width * 0.7));
 		updateHitbox();
 
-		x += 112 * noteData;
+		x += 112 * id;
 
 		antialiasing = true;
 

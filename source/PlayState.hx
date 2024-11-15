@@ -57,9 +57,6 @@ class PlayState extends FlxState
 		Conductor.songPosition = 0;
 		inst.play();
 		voices.play();
-
-		var _file = new FileReference();
-		_file.save(Json.stringify(SONG, "\t"), "dadadada.json");
 	}
 
 	override public function update(elasped:Float){
