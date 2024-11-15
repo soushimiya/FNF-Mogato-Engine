@@ -1,4 +1,4 @@
-package scripting;
+package mogato.scripting;
 
 import hscript.Parser;
 import hscript.Interp;

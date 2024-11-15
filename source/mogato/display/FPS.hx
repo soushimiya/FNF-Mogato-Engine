@@ -1,4 +1,4 @@
-package display;
+package mogato.display;
 
 import haxe.Timer;
 import openfl.events.Event;

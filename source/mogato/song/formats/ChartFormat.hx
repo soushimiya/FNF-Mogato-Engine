@@ -1,4 +1,4 @@
-package song.formats;
+package mogato.song.formats;
 
 class ChartFormat
 {

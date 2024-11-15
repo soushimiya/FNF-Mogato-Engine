@@ -1,10 +1,9 @@
-package;
+package mogato.song;
 
-import song.Conductor;
+import mogato.song.formats.ChartFormat;
 
 import flixel.group.FlxSpriteGroup;
 import flixel.FlxSprite;
-import song.formats.ChartFormat;
 import flixel.util.FlxSort;
 import flixel.FlxG;
 
@@ -14,7 +13,7 @@ class Strumline extends FlxSpriteGroup
 {
 	var directions:Array<String> = ["LEFT", "DOWN", "UP", "RIGHT"];
 
-	private var notes:FlxTypedSpriteGroup<Note>;
+	public var notes:FlxTypedSpriteGroup<Note>;
 
 	var scroll:Int = -1; // 1 = downscroll
 

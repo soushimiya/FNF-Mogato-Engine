@@ -1,4 +1,4 @@
-package;
+package mogato;
 
 import flixel.graphics.frames.FlxAtlasFrames;
 

@@ -1,7 +1,7 @@
-package song;
+package mogato.song;
 
 import flixel.util.FlxSignal.FlxTypedSignal;
-import song.formats.ChartFormat;
+import mogato.song.formats.ChartFormat;
 
 typedef BPMChangeEvent = {
 	var bpm:Float;

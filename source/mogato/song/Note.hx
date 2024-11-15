@@ -1,7 +1,6 @@
-package;
+package mogato.song;
 
 import flixel.FlxSprite;
-import song.Conductor;
 
 using StringTools;
 

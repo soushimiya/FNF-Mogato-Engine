@@ -1,8 +1,9 @@
-package;
+package mogato;
 
-import song.Conductor;
-import song.formats.*;
-import scripting.*;
+import mogato.song.*;
+import mogato.song.formats.*;
+import mogato.scripting.*;
+import mogato.util.*;
 
 import flixel.FlxG;
 import flixel.tweens.FlxTween;
@@ -11,15 +12,25 @@ import flixel.FlxState;
 import haxe.Json;
 import flixel.sound.FlxSound;
 import flixel.text.FlxText;
-import openfl.net.FileReference;
+import flixel.FlxSprite;
+import flixel.ui.FlxBar;
+import flixel.FlxCamera;
 
 class PlayState extends FlxState
 {
 	public static var songName:String = "bopeebo";
 	public static var SONG:ChartFormat;
+
+	public static var health:Float = 0.5;
 	
 	public var inst:FlxSound;
 	public var voices:FlxSound;
+
+	private var camHUD:FlxCamera;
+	private var camGame:FlxCamera;
+
+	private var healthBarBG:FlxSprite;
+	private var healthBar:FlxBar;
 
 	var opponentStrums:Strumline;
 	var playerStrums:Strumline;
@@ -44,10 +55,31 @@ class PlayState extends FlxState
 
 		Conductor.mapBPMChanges(SONG);
 
+		camGame = new FlxCamera();
+		camHUD = new FlxCamera();
+		camHUD.bgColor.alpha = 0;
+
+		FlxG.cameras.reset(camGame);
+		FlxG.cameras.add(camHUD, false);
+
+		healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
+		healthBarBG.screenCenter(X);
+		healthBarBG.scrollFactor.set();
+		healthBarBG.cameras = [camHUD];
+		add(healthBarBG);
+
+		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this, 'health', 0, 2);
+		healthBar.scrollFactor.set();
+		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
+		healthBar.cameras = [camHUD];
+		add(healthBar);
+
 		opponentStrums = new Strumline(42, 10, SONG.dadNotes, SONG.speed);
+		opponentStrums.cameras = [camHUD];
 		add(opponentStrums);
 
 		playerStrums = new Strumline((FlxG.width / 2) + 50, 10, SONG.bfNotes, SONG.speed);
+		playerStrums.cameras = [camHUD];
 		add(playerStrums);
 
 		debugText = new FlxText(3, 3, 0, "", 20);
@@ -59,12 +91,12 @@ class PlayState extends FlxState
 		voices.play();
 	}
 
-	override public function update(elasped:Float){
+	override public function update(elapsed:Float){
 		Conductor.songPosition = inst.time;
 		Conductor.update();
 
-		opponentStrums.update(elasped);
-		playerStrums.update(elasped);
+		opponentStrums.update(elapsed);
+		playerStrums.update(elapsed);
 
 		debugText.text = "Position: " + Math.round(Conductor.songPosition) / 1000;
 		debugText.text += "\nStep: " + Conductor.curStep;
@@ -80,8 +112,8 @@ class PlayState extends FlxState
 	{
 		if (beat % 4 == 0)
 		{
-			FlxG.camera.zoom = 1.05;
-			FlxTween.tween(FlxG.camera, {zoom: 1}, (Conductor.bpm / 60) * 0.8, {ease: FlxEase.circOut});
+			camHUD.zoom = 1.05;
+			FlxTween.tween(camHUD, {zoom: 1}, (Conductor.bpm / 60) * 0.8, {ease: FlxEase.circOut});
 		}
 	}
 }

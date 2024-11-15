@@ -1,6 +1,6 @@
-package song.formats;
+package mogato.song.formats;
 
-import song.formats.ChartFormat;
+import mogato.song.formats.ChartFormat;
 
 class MogatoChart extends ChartFormat
 {

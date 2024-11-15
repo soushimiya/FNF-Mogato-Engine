@@ -1,4 +1,4 @@
-package;
+package mogato.util;
 
 import openfl.utils.Assets;
 
