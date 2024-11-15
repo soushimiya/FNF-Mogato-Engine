@@ -28,7 +28,7 @@ class Conductor
 
 	public static function mapBPMChanges(song:ChartFormat) {
 		songPosition = 0;
-		bpm = 0;
+		bpm = song.bpm;
 		curStep = 0;
 		curBeat = 0;
 
@@ -37,19 +37,19 @@ class Conductor
 		if(song.events == null)
 			return;
 
-		var currentBPM = song.bpm;
+		var currentBPM = bpm;
 		var curTime:Float = 0;
 		var curStepEvent:Float = 0;
 
 		for(e in song.events) {
 			if(e.name == "Change BPM") {
-				if(e.param[0] == currentBPM)
+				if(e.params[0] == currentBPM)
 					continue;
 
 				var steps:Float = (e.time - curTime) / ((60 / currentBPM) * 1000 / 4);
 				curStepEvent += steps;
 				curTime = e.time;
-				currentBPM = e.param[0];
+				currentBPM = e.params[0];
 
 				bpmChanges.push({
 					step: curStepEvent,

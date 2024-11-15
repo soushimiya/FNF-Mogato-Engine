@@ -12,8 +12,8 @@ class Paths
 	public static inline function xml(path:String)
 		return '$rootPath/images/$path.xml';
 
-	public static inline function json(path:String)
-		return '$rootPath/data/$path.json';
+	public static inline function json(path:String, ?folder:String = "data")
+		return '$rootPath/$folder/$path.json';
 
 	public static inline function audio(path:String)
 		return '$rootPath/$path.ogg';

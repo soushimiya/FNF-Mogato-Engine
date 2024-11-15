@@ -30,7 +30,9 @@
 
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
+
 	<haxelib name="hscript-improved" />
+	<haxedef name="hscriptPos" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
