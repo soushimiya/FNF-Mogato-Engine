@@ -1,6 +1,7 @@
 package mogato.song;
 
 import flixel.FlxSprite;
+import mogato.states.PlayState;
 
 using StringTools;
 

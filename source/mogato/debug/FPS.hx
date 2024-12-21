@@ -1,4 +1,4 @@
-package mogato.display;
+package mogato.debug;
 
 import haxe.Timer;
 import openfl.events.Event;
@@ -8,7 +8,7 @@ import openfl.system.System;
 
 /**
 	The FPS class provides an easy-to-use monitor to display
-	the current frame rate of an OpenFL project
+	the current frame rate of Mogato Engine
 **/
 class FPS extends TextField
 {

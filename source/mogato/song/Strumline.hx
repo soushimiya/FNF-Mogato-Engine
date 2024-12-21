@@ -1,5 +1,6 @@
 package mogato.song;
 
+import flixel.util.FlxSignal.FlxTypedSignal;
 import mogato.song.formats.ChartFormat;
 import flixel.group.FlxSpriteGroup;
 import flixel.FlxSprite;
@@ -13,6 +14,7 @@ class Strumline extends FlxSpriteGroup
 	var directions:Array<String> = ["LEFT", "DOWN", "UP", "RIGHT"];
 
 	public var notes:FlxTypedSpriteGroup<Note>;
+	public var onNoteHit:FlxTypedSignal<Note->Void> = new FlxTypedSignal();
 
 	var downscroll:Bool = false;
 
@@ -147,6 +149,7 @@ class Strumline extends FlxSpriteGroup
 	public function noteHit(note:Note)
 	{
 		note.visible = false;
+		onNoteHit.dispatch(note);
 	}
 
 	// Stole from Funkin' hehe

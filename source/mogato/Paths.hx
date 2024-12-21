@@ -18,6 +18,9 @@ class Paths
 	public static inline function audio(path:String)
 		return '$rootPath/$path.ogg';
 
+	public static inline function font(path:String)
+		return '$rootPath/fonts/$path';
+
 	public static inline function sparrow(path:String)
 		return FlxAtlasFrames.fromSparrow('assets/images/$path.png', 'assets/images/$path.xml');
 }

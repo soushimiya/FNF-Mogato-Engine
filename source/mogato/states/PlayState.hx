@@ -1,4 +1,4 @@
-package mogato;
+package mogato.states;
 
 import mogato.song.*;
 import mogato.song.formats.*;
@@ -15,13 +15,18 @@ import flixel.text.FlxText;
 import flixel.FlxSprite;
 import flixel.ui.FlxBar;
 import flixel.FlxCamera;
+import flixel.math.FlxMath;
+import flixel.util.FlxColor;
 
-class PlayState extends FlxState
+class PlayState extends MogatoState
 {
 	public static var songName:String = "bopeebo";
 	public static var SONG:ChartFormat;
 
-	public static var health:Float = 1;
+	public var health:Float = 1;
+	public var healthLerp:Float = 1;
+
+	public var score:Float = 0;
 	
 	public var inst:FlxSound;
 	public var voices:FlxSound;
@@ -32,10 +37,10 @@ class PlayState extends FlxState
 	private var healthBarBG:FlxSprite;
 	private var healthBar:FlxBar;
 
+	private var scoreText:FlxText;
+
 	var opponentStrums:Strumline;
 	var playerStrums:Strumline;
-
-	public var debugText:FlxText;
 	
 	override public function create()
 	{
@@ -68,11 +73,18 @@ class PlayState extends FlxState
 		healthBarBG.cameras = [camHUD];
 		add(healthBarBG);
 
-		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this, 'health', 0, 2);
+		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this, 'healthLerp', 0, 2);
 		healthBar.scrollFactor.set();
 		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
+		healthBar.antialiasing = true;
 		healthBar.cameras = [camHUD];
 		add(healthBar);
+
+		scoreText = new FlxText(healthBarBG.x + healthBarBG.width - 190, healthBarBG.y + 30, 0, '', 20);
+		scoreText.setFormat(Paths.font('vcr.ttf'), 20, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreText.scrollFactor.set();
+		scoreText.cameras = [camHUD];
+		add(scoreText);
 
 		opponentStrums = new Strumline(42, 10, SONG.dadNotes, SONG.speed, true);
 		opponentStrums.cameras = [camHUD];
@@ -80,11 +92,8 @@ class PlayState extends FlxState
 
 		playerStrums = new Strumline((FlxG.width / 2) + 50, 10, SONG.bfNotes, SONG.speed);
 		playerStrums.cameras = [camHUD];
+		playerStrums.onNoteHit.add(goodNoteHit);
 		add(playerStrums);
-
-		debugText = new FlxText(3, 3, 0, "", 20);
-		debugText.alpha /= 3;
-		add(debugText);
 
 		Conductor.songPosition = 0;
 		inst.play();
@@ -97,14 +106,16 @@ class PlayState extends FlxState
 		Conductor.songPosition = inst.time;
 		Conductor.update();
 
-		debugText.text = "Position: " + Math.round(Conductor.songPosition) / 1000;
-		debugText.text += "\nStep: " + Conductor.curStep;
-		debugText.text += "\nBeat: " + Conductor.curBeat;
+		healthLerp = FlxMath.lerp(healthLerp, health, 0.35);
+		if (health > 2){
+			health = 2;
+		}
+
+		scoreText.text = "Score: " + score;
 	}
 
 	public function stepHit(step:Int)
 	{
-		//does nothin lol
 	}
 
 	public function beatHit(beat:Int)
@@ -114,5 +125,11 @@ class PlayState extends FlxState
 			camHUD.zoom = 1.05;
 			FlxTween.tween(camHUD, {zoom: 1}, (Conductor.bpm / 60) * 0.4, {ease: FlxEase.circOut});
 		}
+	}
+
+	public function goodNoteHit(note:Note)
+	{
+		health += 0.03;
+		score += 10;
 	}
 }
