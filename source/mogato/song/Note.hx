@@ -17,6 +17,10 @@ class Note extends FlxSprite
 
 	public var score:Float = 1;
 
+	public var hittable:Bool = false;
+	public var hit:Bool = false;
+	public var late:Bool = false;
+
 	public static final arrowArray:Array<String> = ["purple", "blue", "green", "red"];
 
 	public function new(time:Float, id:Int, ?prevNote:Note, ?sustainNote:Bool = false)
@@ -68,5 +72,13 @@ class Note extends FlxSprite
 				prevNote.updateHitbox();
 			}
 		}
+	}
+
+	override public function update(elasped:Float)
+	{
+		hittable = (time > Conductor.songPosition - 1 && time < Conductor.songPosition + 1);
+
+		if (time < Conductor.songPosition)
+			late = true;
 	}
 }

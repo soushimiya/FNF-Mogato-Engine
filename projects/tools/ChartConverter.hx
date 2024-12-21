@@ -2,6 +2,7 @@ package;
 
 import sys.FileSystem;
 import haxe.Json;
+import sys.io.File;
 
 using StringTools;
 
@@ -45,25 +46,28 @@ class ChartConverter
 			var notes:Array<Array<Float>> = section.sectionNotes;
 			for(note in notes)
 			{
-				var newNote:Array<Float> = [];
-				var noteId:Int = Std.int(note[0]);
+				var noteId:Int = Std.int(note[1]);
 				var mustHit:Bool = section.mustHitSection;
 				if (noteId > 3){
 					mustHit = !mustHit;
-					noteId -= 4;
+					noteId = noteId % 4;
 				}
 
 				//No custom notes for now!
-				newNote[0] = noteId;
-				newNote[1] = note[1];
-				newNote[2] = note[2];
+				var newNote:MogatoNote = {
+					time: note[0],
+					id: noteId,
+					length: note[2]
+				};
+
 				if (mustHit)
 					convertedChart.boyfriend.notes.push(newNote);
 				else
 					convertedChart.dad.notes.push(newNote);
 			}
 		}
-		trace(Json.stringify(convertedChart, "\t"));
+
+		File.saveContent(chartPath.split(".json")[0] + "-converted.json", Json.stringify(convertedChart, "\t"));
 	}
 }
 
@@ -71,4 +75,10 @@ typedef PsychSection = {
 	var lengthInSteps:Int;
 	var mustHitSection:Bool;
 	var sectionNotes:Array<Array<Float>>;
+}
+
+typedef MogatoNote = {
+	var time:Float;
+	var id:Int;
+	var length:Null<Float>;
 }

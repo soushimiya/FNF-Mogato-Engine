@@ -43,14 +43,14 @@ class PlayState extends FlxState
 		Conductor.onStepHit.add(stepHit);
 		Conductor.onBeatHit.add(beatHit);
 
-		SONG = new MogatoChart(Json.parse(CoolUtil.getText(Paths.json("dadbattle/chart/hard", "songs"))));
+		SONG = ChartFormat.get("diamond", "hard");
 
 		inst = new FlxSound();
-		inst.loadEmbedded(Paths.audio("songs/dadbattle/audio/Inst"));
+		inst.loadEmbedded(Paths.audio("songs/diamond/" + SONG.audioFolder + "Inst"));
 		FlxG.sound.list.add(inst);
 
 		voices = new FlxSound();
-		voices.loadEmbedded(Paths.audio("songs/dadbattle/audio/Voices"));
+		voices.loadEmbedded(Paths.audio("songs/diamond/" + SONG.audioFolder + "Voices"));
 		FlxG.sound.list.add(voices);
 
 		Conductor.mapBPMChanges(SONG);
@@ -74,7 +74,7 @@ class PlayState extends FlxState
 		healthBar.cameras = [camHUD];
 		add(healthBar);
 
-		opponentStrums = new Strumline(42, 10, SONG.dadNotes, SONG.speed);
+		opponentStrums = new Strumline(42, 10, SONG.dadNotes, SONG.speed, true);
 		opponentStrums.cameras = [camHUD];
 		add(opponentStrums);
 
@@ -92,11 +92,10 @@ class PlayState extends FlxState
 	}
 
 	override public function update(elapsed:Float){
+		super.update(elapsed);
+		
 		Conductor.songPosition = inst.time;
 		Conductor.update();
-
-		opponentStrums.update(elapsed);
-		playerStrums.update(elapsed);
 
 		debugText.text = "Position: " + Math.round(Conductor.songPosition) / 1000;
 		debugText.text += "\nStep: " + Conductor.curStep;

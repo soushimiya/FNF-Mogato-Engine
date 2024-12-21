@@ -16,15 +16,18 @@ class Strumline extends FlxSpriteGroup
 
 	var downscroll:Bool = false;
 
+	var cpu:Bool = false;
+
 	var speed:Float = 1;
 
 	static final INITIAL_OFFSET = -0.275 * 104;
 
-	public function new(x:Float, y:Float, dataNotes:Array<ChartNote>, ?scrollSpeed:Float = 1, ?cpu:Bool = false)
+	public function new(x:Float, y:Float, dataNotes:Array<ChartNote>, ?scrollSpeed:Float = 1, ?isCpu:Bool = false)
 	{
 		super(x, y);
 
 		this.speed = scrollSpeed;
+		this.cpu = isCpu;
 
 		for (i in 0...directions.length)
 		{
@@ -90,9 +93,63 @@ class Strumline extends FlxSpriteGroup
 		{
 			note.y = this.y - INITIAL_OFFSET + calculateNoteYPos(note.time, true);
 		}
+
+		// Oh my god this sucks bro
+		if (FlxG.keys.justPressed.LEFT && !cpu)
+		{
+			input(0);
+		}
+		else if (FlxG.keys.justPressed.DOWN && !cpu)
+		{
+			input(1);
+		}
+		if (FlxG.keys.justPressed.UP && !cpu)
+		{
+			input(2);
+		}
+		if (FlxG.keys.justPressed.RIGHT && !cpu)
+		{
+			input(3);
+		}
+
+		if (cpu)
+		{
+			for (note in notes.members)
+				if (Conductor.songPosition >= note.time)
+					noteHit(note);
+		}
 	}
 
-	//Stole from Funkin' hehe
+	public function input(strum:Float)
+	{
+		// Based on Wizard Mania Input lol
+
+		// possible press notes
+		var possibleNotes = notes.members.filter((note) -> {
+			return note != null 											// remove null notes
+				&& note.id == strum 									// check only cur strum
+				&& Math.abs(Conductor.songPosition - note.time) < (500 / speed); 	// only in hitzone
+		});
+
+		if (possibleNotes.length > 0) { // hit note
+			possibleNotes.sort((a, b) -> Std.int(a.time - b.time));
+
+			var toClear = possibleNotes.filter((note) -> {
+				return Math.abs(possibleNotes[0].time - note.time) < 5;
+			});
+
+			for (note in toClear) {
+				noteHit(note);
+			}
+		}
+	}
+
+	public function noteHit(note:Note)
+	{
+		note.visible = false;
+	}
+
+	// Stole from Funkin' hehe
 	public function calculateNoteYPos(strumTime:Float, vwoosh:Bool = true):Float
 	{
 		// Make the note move faster visually as it moves offscreen.
