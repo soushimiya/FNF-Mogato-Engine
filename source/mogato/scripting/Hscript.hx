@@ -5,7 +5,7 @@ import hscript.Interp;
 
 using StringTools;
 
-class Hscript extends Interp
+class HScript extends Interp
 {
     override public function new(scriptThing:String){
         super();

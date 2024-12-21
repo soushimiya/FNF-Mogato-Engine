@@ -1,0 +1,35 @@
+{
+	"gf": {
+		"character": "gf",
+		"notes": [
+			[
+				596,
+				3,
+				600
+			]
+		]
+	},
+	"dad": {
+		"character": "gf",
+		"notes": [
+			[
+				596,
+				3,
+				600
+			]
+		]
+	},
+	"boyfriend": {
+		"character": "gf",
+		"notes": [
+			[
+				596,
+				3,
+				600
+			]
+		]
+	},
+	"song": "Bopeebo",
+	"bpm": 100,
+	"speed": 1.3
+}

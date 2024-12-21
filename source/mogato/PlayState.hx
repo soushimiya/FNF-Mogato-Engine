@@ -21,7 +21,7 @@ class PlayState extends FlxState
 	public static var songName:String = "bopeebo";
 	public static var SONG:ChartFormat;
 
-	public static var health:Float = 0.5;
+	public static var health:Float = 1;
 	
 	public var inst:FlxSound;
 	public var voices:FlxSound;
@@ -43,14 +43,14 @@ class PlayState extends FlxState
 		Conductor.onStepHit.add(stepHit);
 		Conductor.onBeatHit.add(beatHit);
 
-		SONG = new MogatoChart(Json.parse(CoolUtil.getText(Paths.json("bopeebo/chart/hard", "songs"))));
+		SONG = new MogatoChart(Json.parse(CoolUtil.getText(Paths.json("dadbattle/chart/hard", "songs"))));
 
 		inst = new FlxSound();
-		inst.loadEmbedded(Paths.audio("songs/bopeebo/audio/Inst"));
+		inst.loadEmbedded(Paths.audio("songs/dadbattle/audio/Inst"));
 		FlxG.sound.list.add(inst);
 
 		voices = new FlxSound();
-		voices.loadEmbedded(Paths.audio("songs/bopeebo/audio/Voices"));
+		voices.loadEmbedded(Paths.audio("songs/dadbattle/audio/Voices"));
 		FlxG.sound.list.add(voices);
 
 		Conductor.mapBPMChanges(SONG);
@@ -113,7 +113,7 @@ class PlayState extends FlxState
 		if (beat % 4 == 0)
 		{
 			camHUD.zoom = 1.05;
-			FlxTween.tween(camHUD, {zoom: 1}, (Conductor.bpm / 60) * 0.8, {ease: FlxEase.circOut});
+			FlxTween.tween(camHUD, {zoom: 1}, (Conductor.bpm / 60) * 0.4, {ease: FlxEase.circOut});
 		}
 	}
 }

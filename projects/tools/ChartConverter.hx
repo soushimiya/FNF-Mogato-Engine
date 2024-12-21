@@ -3,6 +3,8 @@ package;
 import sys.FileSystem;
 import haxe.Json;
 
+using StringTools;
+
 class ChartConverter
 {
 	public static function main():Void
@@ -10,14 +12,14 @@ class ChartConverter
 		var chartPath:String = "";
 
 		trace("Enter Chart Path!");
-		chartPath = Sys.stdin().readLine();
+		chartPath = Sys.stdin().readLine().trim();
 
 		if (!FileSystem.exists(chartPath)){
 			trace('No Chart Exist on ($chartPath) !!');
 			return;
 		}
 
-		//Doing actual converting lol btw legacy psych format only yet!!!!!
+		//Doing actual converting lol
 		var chart:Dynamic = Json.parse(sys.io.File.getContent(chartPath)).song;
 
 		var convertedChart:Dynamic = {};
@@ -26,17 +28,18 @@ class ChartConverter
 		convertedChart.bpm = chart.bpm;
 		convertedChart.speed = chart.speed;
 
-		convertedChart.boyfriendStrum = {};
-		convertedChart.boyfriendStrum.character = chart.player1;
-		convertedChart.dadStrum = {};
-		convertedChart.dadStrum.character = chart.player2;
-		//idk??? i forgot wtf is called
-		if (chart.player3 != null) convertedChart.gf = chart.player3; else convertedChart.gf = "gf";
+		convertedChart.boyfriend = {};
+		convertedChart.boyfriend.character = chart.player1;
+		convertedChart.dad = {};
+		convertedChart.dad.character = chart.player2;
+		//idk???
+		convertedChart.gf = {};
+		if (chart.gfVersion != null) convertedChart.gf.character = chart.gfVersion; else convertedChart.gf.character = "gf";
 
 		var sections:Array<PsychSection> = chart.notes;
 		//nah i gonna fw this
-		convertedChart.boyfriendStrum.notes = [];
-		convertedChart.dadStrum.notes = [];
+		convertedChart.boyfriend.notes = [];
+		convertedChart.dad.notes = [];
 		for (section in sections)
 		{
 			var notes:Array<Array<Float>> = section.sectionNotes;
@@ -55,9 +58,9 @@ class ChartConverter
 				newNote[1] = note[1];
 				newNote[2] = note[2];
 				if (mustHit)
-					convertedChart.boyfriendStrum.notes.push(newNote);
+					convertedChart.boyfriend.notes.push(newNote);
 				else
-					convertedChart.dadStrum.notes.push(newNote);
+					convertedChart.dad.notes.push(newNote);
 			}
 		}
 		trace(Json.stringify(convertedChart, "\t"));

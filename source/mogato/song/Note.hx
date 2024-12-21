@@ -17,7 +17,7 @@ class Note extends FlxSprite
 
 	public var score:Float = 1;
 
-	public static var arrowArray:Array<String> = ["purple", "blue", "green", "red"];
+	public static final arrowArray:Array<String> = ["purple", "blue", "green", "red"];
 
 	public function new(time:Float, id:Int, ?prevNote:Note, ?sustainNote:Bool = false)
 	{

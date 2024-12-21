@@ -10,7 +10,7 @@ class MogatoChart extends ChartFormat
 		speed = chart.speed;
 
 		//events = chart.events;
-		var ogBf:Array<Array<Float>> = chart.boyfriendStrum.notes;
+		var ogBf:Array<Array<Float>> = chart.boyfriend.notes;
 		var convBf:Array<ChartNote> = [];
 		for (note in ogBf)
 		{
@@ -24,7 +24,7 @@ class MogatoChart extends ChartFormat
 		}
 		bfNotes = convBf;
 		
-		var ogDad:Array<Array<Float>> = chart.dadStrum.notes;
+		var ogDad:Array<Array<Float>> = chart.dad.notes;
 		var convdad:Array<ChartNote> = [];
 		for (note in ogDad)
 		{
@@ -38,9 +38,9 @@ class MogatoChart extends ChartFormat
 		}
 		dadNotes = convdad;
 	
-		player1 = chart.boyfriendStrum.character;
-		player2 = chart.dadStrum.character;
-		gf = chart.girlfriend;
+		player1 = chart.boyfriend.character;
+		player2 = chart.dad.character;
+		gf = chart.gf.character;
 
 		stage = chart.stage;
 	}

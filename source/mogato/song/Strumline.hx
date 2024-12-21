@@ -1,7 +1,6 @@
 package mogato.song;
 
 import mogato.song.formats.ChartFormat;
-
 import flixel.group.FlxSpriteGroup;
 import flixel.FlxSprite;
 import flixel.util.FlxSort;
@@ -15,10 +14,12 @@ class Strumline extends FlxSpriteGroup
 
 	public var notes:FlxTypedSpriteGroup<Note>;
 
-	var scroll:Int = -1; // 1 = downscroll
+	var downscroll:Bool = false;
 
 	var speed:Float = 1;
-	
+
+	static final INITIAL_OFFSET = -0.275 * 104;
+
 	public function new(x:Float, y:Float, dataNotes:Array<ChartNote>, ?scrollSpeed:Float = 1, ?cpu:Bool = false)
 	{
 		super(x, y);
@@ -33,7 +34,7 @@ class Strumline extends FlxSpriteGroup
 			strumNote.setGraphicSize(Std.int(strumNote.width * 0.7));
 			strumNote.x += (160 * 0.7) * i;
 			strumNote.antialiasing = true;
-			//wtf funkincrew fucked up
+			// wtf funkincrew fucked up
 			if (i == 2)
 				strumNote.animation.addByPrefix('default', 'arrow static instance 4');
 			else if (i == 3)
@@ -54,7 +55,8 @@ class Strumline extends FlxSpriteGroup
 		for (note in dataNotes)
 		{
 			var oldNote:Note = null;
-			if (notes.length > 0) oldNote = notes.members[Std.int(notes.length - 1)];
+			if (notes.length > 0)
+				oldNote = notes.members[Std.int(notes.length - 1)];
 
 			var swagNote:Note = new Note(note.time, note.id, oldNote);
 			swagNote.sustainLength = note.length;
@@ -81,10 +83,23 @@ class Strumline extends FlxSpriteGroup
 		return FlxSort.byValues(order, Obj1.time, Obj2.time);
 	}
 
-	override public function update(elasped:Float){
+	override public function update(elasped:Float)
+	{
 		super.update(elasped);
-		for (note in notes.members){
-			note.y = 0.45 * (Conductor.songPosition - note.time) * speed * scroll;
+		for (note in notes.members)
+		{
+			note.y = this.y - INITIAL_OFFSET + calculateNoteYPos(note.time, true);
 		}
+	}
+
+	//Stole from Funkin' hehe
+	public function calculateNoteYPos(strumTime:Float, vwoosh:Bool = true):Float
+	{
+		// Make the note move faster visually as it moves offscreen.
+		// var vwoosh:Float = (strumTime < Conductor.songPosition) && vwoosh ? 2.0 : 1.0;
+		// ^^^ commented this out... do NOT make it move faster as it moves offscreen!
+		var vwoosh:Float = 1.0;
+
+		return 0.45 * (Conductor.songPosition - strumTime) * speed * vwoosh * (downscroll ? 1 : -1);
 	}
 }
